@@ -174,6 +174,7 @@ void GradewRF::setReceive(int _rfInt)
   this->syncState=0;
   this->stopReceiving=0;
   #ifdef RaspberryPi
+  wiringPiSetupGpio(); // Using Broadcom chip pin numbers
   wiringPiISR(this->rfInt, INT_EDGE_BOTH, &handleInterrupt);
   #else
   attachInterrupt(this->rfInt, handleInterrupt, CHANGE);
