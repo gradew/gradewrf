@@ -191,7 +191,7 @@ void GradewRF::generatePulse(byte p)
 				signalData[signalIdx++]=PULSE_LONG;
 				signalData[signalIdx++]=PULSE_SHORT;
 		}
-		if(signalIdx=>MAX_SIGNAL_DATA){
+		if(signalIdx>=MAX_SIGNAL_DATA){
 			signalIdx=0; // circular buffer; ugly, but prevents overflows
 		}
 		totalDuration+=PULSE_LONG+PULSE_SHORT;
