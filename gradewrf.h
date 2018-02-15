@@ -52,6 +52,7 @@ private:
   static int signalIdx;
   static int userIdx;
   static int rfPin;
+  static byte txRepetitions;
 
 
 public:

@@ -21,6 +21,7 @@ unsigned long GradewRF::totalDuration;
 int GradewRF::signalIdx;
 int GradewRF::userIdx;
 int GradewRF::rfPin;
+byte GradewRF::txRepetitions;
 
 
 bool GradewRF::checkOrder(unsigned long value, unsigned long ref, unsigned long tol)
@@ -245,6 +246,7 @@ void GradewRF::setTransmit(int _rfPin)
 		#else
 				wiringPiSetupGpio(); // Using Broadcom chip pin numbers
 		#endif
+		this->txRepetitions=3;
 		pinMode(this->rfPin, OUTPUT);
 		digitalWrite(this->rfPin, LOW);
 		delay(1);
@@ -259,16 +261,20 @@ void GradewRF::transmitData(unsigned long val)
 		encodeByte(val&0xff);
 		endSignal();
 
-		totalDuration=0;
-		lastVal=0;
-		if(signalData[0]>0)
-										digitalWrite(this->rfPin, LOW);
-		for(int i=0;i<signalIdx;i++){
-										lastVal=!lastVal;
-										delayMicroseconds(signalData[i]);
-										digitalWrite(this->rfPin, lastVal?HIGH:LOW);
-										//
-										totalDuration+=signalData[i];
+		for(int r=0;r<txRepetitions;r++){
+			totalDuration=0;
+			lastVal=0;
+			if(signalData[0]>0)
+				digitalWrite(this->rfPin, LOW);
+			for(int i=0;i<signalIdx;i++){
+				lastVal=!lastVal;
+				delayMicroseconds(signalData[i]);
+				digitalWrite(this->rfPin, lastVal?HIGH:LOW);
+				//
+				totalDuration+=signalData[i];
+			}
+			if(lastVal)digitalWrite(this->rfPin, LOW);
+			delayMicroseconds(1000);
 		}
-		if(lastVal)digitalWrite(this->rfPin, LOW);
+
 }
