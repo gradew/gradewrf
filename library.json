@@ -1,0 +1,20 @@
+{
+  "name": "gradewrf",
+  "description": "A 433Mhz transceiver library for Arduino and RPi",
+  "keywords": "rf, 433, radio",
+  "authors":
+  {
+    "name": "Gradew"
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/gradew/gradewrf.git"
+  },
+  "version": "1.0.0",
+  "frameworks": [
+        "arduino",
+        "wiringpi"
+  ],
+  "platforms": "*"
+}
