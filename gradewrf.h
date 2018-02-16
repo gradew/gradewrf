@@ -45,8 +45,10 @@ private:
   volatile static int userDataSize;
   volatile static bool userDataAvailable;
   volatile static int rfInt;
+  volatile static int rxChecksum;
   
 // Transmission
+  volatile static byte txData[4];
   static int signalData[MAX_SIGNAL_DATA];
   static byte lastVal;
   static unsigned long totalDuration;
@@ -72,6 +74,9 @@ public:
   void endSignal();
   void setTransmit(int _rfPin);
   void transmitData(unsigned long val);
+
+  byte calculateChecksum();
+  static bool verifyChecksum();
 };
 
 #endif

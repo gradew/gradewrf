@@ -12,17 +12,18 @@ volatile byte GradewRF::userData[4];
 volatile int GradewRF::userDataSize;
 volatile bool GradewRF::userDataAvailable;
 volatile int GradewRF::rfInt;
+volatile int GradewRF::rxChecksum;
 
 
 // transmission
 int GradewRF::signalData[MAX_SIGNAL_DATA];
+volatile byte GradewRF::txData[4];
 byte GradewRF::lastVal;
 unsigned long GradewRF::totalDuration;
 int GradewRF::signalIdx;
 int GradewRF::userIdx;
 int GradewRF::rfPin;
 byte GradewRF::txRepetitions;
-
 
 bool GradewRF::checkOrder(unsigned long value, unsigned long ref, unsigned long tol)
 {
@@ -50,10 +51,12 @@ void GradewRF::addBit(char v)
     }else if(GradewRF::nBytes==1){
       //Serial.print(tByte);
       //Serial.println(" bytes!");
+    }else if(GradewRF::nBytes==2){
+      GradewRF::rxChecksum=tByte;
     }else{
       // Actual data
       GradewRF::userData[GradewRF::userDataSize++]=GradewRF::tByte;
-      if(GradewRF::nBytes==5){
+      if(GradewRF::nBytes==6){
         GradewRF::stopReceiving=1;
       }
     }
@@ -65,7 +68,9 @@ void GradewRF::addBit(char v)
       GradewRF::syncState=0;
       GradewRF::nBytes=0;
       GradewRF::stopReceiving=0;
-      GradewRF::userDataAvailable=1;
+      if(GradewRF::verifyChecksum()){
+        GradewRF::userDataAvailable=1;
+      }
     }
   }
 }
@@ -258,14 +263,33 @@ void GradewRF::setTransmit(int _rfPin)
 		digitalWrite(this->rfPin, LOW);
 		delay(1);
 }
+
+byte GradewRF::calculateChecksum()
+{
+	return txData[0]^txData[1]^txData[2]^txData[3];
+}
+
+bool GradewRF::verifyChecksum()
+{
+	return true;
+}
+
 void GradewRF::transmitData(unsigned long val)
 {
+		//
+		txData[0]=val>>24;
+		txData[1]=(val>>16)&0xff;
+		txData[2]=(val>>8)&0xff;
+		txData[3]=val&0xff;
+		//
+		byte txChecksum=calculateChecksum();
 		startSignal();
-		encodeByte(4);
-		encodeByte(val>>24);
-		encodeByte((val>>16)&0xff);
-		encodeByte((val>>8)&0xff);
-		encodeByte(val&0xff);
+		encodeByte(4); // length
+		encodeByte(txChecksum); // checksum
+		encodeByte(txData[0]);
+		encodeByte(txData[1]);
+		encodeByte(txData[2]);
+		encodeByte(txData[3]);
 		endSignal();
 
 		for(int r=0;r<txRepetitions;r++){
