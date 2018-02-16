@@ -271,7 +271,10 @@ byte GradewRF::calculateChecksum()
 
 bool GradewRF::verifyChecksum()
 {
-	return true;
+	byte checksum=userData[0]^userData[1]^userData[2]^userData[3];
+	if(checksum==GradewRF::rxChecksum)
+		return true;
+	return false;
 }
 
 void GradewRF::transmitData(unsigned long val)
