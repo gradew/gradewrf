@@ -170,13 +170,18 @@ unsigned long GradewRF::getData32()
 void GradewRF::setReceive(int _rfInt)
 {
   this->rfInt=_rfInt;
-  pinMode(this->rfPin, INPUT);
   this->syncState=0;
   this->stopReceiving=0;
   #ifdef RaspberryPi
-  wiringPiSetupGpio(); // Using Broadcom chip pin numbers
-  wiringPiISR(this->rfInt, INT_EDGE_BOTH, &handleInterrupt);
+  if(wiringPiSetupGpio()<0){ // Using Broadcom chip pin numbers
+    fprintf (stderr, "Unable to setup wiringPi: %s\n", strerror (errno));
+  }
+  pinMode(this->rfPin, INPUT);
+  if(wiringPiISR(this->rfInt, INT_EDGE_BOTH, &handleInterrupt)<0){
+    fprintf (stderr, "Unable to setup ISR: %s\n", strerror (errno));
+  }
   #else
+  pinMode(this->rfPin, INPUT);
   attachInterrupt(this->rfInt, handleInterrupt, CHANGE);
   #endif
 }

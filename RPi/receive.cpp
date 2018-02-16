@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 			printf("Received: %lu\n", rf.getData32());
 			rf.resetData();
 		}
-		delay(1000);
+		delay(100);
 	}
         return 0;
 }

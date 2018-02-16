@@ -10,6 +10,7 @@
 	#include <stdlib.h>
 	#include <unistd.h>
 	#include <string.h>
+	#include <errno.h>
 	typedef unsigned char byte;
 #endif
 
