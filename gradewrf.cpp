@@ -172,6 +172,7 @@ void GradewRF::setReceive(int _rfInt)
   this->rfInt=_rfInt;
   this->syncState=0;
   this->stopReceiving=0;
+  this->userDataAvailable=0;
   #ifdef RaspberryPi
   if(wiringPiSetupGpio()<0){ // Using Broadcom chip pin numbers
     fprintf (stderr, "Unable to setup wiringPi: %s\n", strerror (errno));

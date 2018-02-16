@@ -3,13 +3,13 @@
 int main(int argc, char *argv[])
 {
         GradewRF rf;
-        rf.setReceive(17); // Use Broadcom chip 17
+        rf.setReceive(24); // Use Broadcom chip 24
 	while(1){
 		if(rf.isDataAvailable()){
 			printf("Received: %lu\n", rf.getData32());
 			rf.resetData();
 		}
-		delay(100);
+		delay(50);
 	}
         return 0;
 }
