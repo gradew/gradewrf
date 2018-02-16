@@ -176,12 +176,12 @@ void GradewRF::setReceive(int _rfInt)
   if(wiringPiSetupGpio()<0){ // Using Broadcom chip pin numbers
     fprintf (stderr, "Unable to setup wiringPi: %s\n", strerror (errno));
   }
-  pinMode(this->rfPin, INPUT);
+  pinMode(this->rfInt, INPUT);
   if(wiringPiISR(this->rfInt, INT_EDGE_BOTH, &handleInterrupt)<0){
     fprintf (stderr, "Unable to setup ISR: %s\n", strerror (errno));
   }
   #else
-  pinMode(this->rfPin, INPUT);
+  pinMode(this->rfInt, INPUT);
   attachInterrupt(this->rfInt, handleInterrupt, CHANGE);
   #endif
 }
