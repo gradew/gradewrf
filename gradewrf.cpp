@@ -80,7 +80,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   GradewRF::lastTime=GradewRF::currentTime;
   //Serial.println(diffTime);
   if(GradewRF::syncState==0){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC1, 150)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC1, 200)){
       //Serial.println("SYNC1");
       GradewRF::syncState=1;
       return;
@@ -88,7 +88,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   }
 
   if(GradewRF::syncState==1){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC2, 150)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC2, 200)){
       //Serial.println("SYNC2");
       GradewRF::syncState=2;
       GradewRF::previousDiff=0;
@@ -100,7 +100,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   }
 
   if(GradewRF::syncState==2){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC3, 150)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC3, 200)){
       //Serial.println("SYNC3");
       GradewRF::syncState=3;
       GradewRF::previousDiff=0;
@@ -112,7 +112,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   }
 
   if(GradewRF::syncState==3){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC4, 150)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC4, 200)){
       //Serial.println("Synchronized! Starting receiving");
       GradewRF::syncState=4;
       GradewRF::previousDiff=0;
