@@ -51,6 +51,7 @@ void GradewRF::addBit(char v)
     }else if(GradewRF::nBytes==1){
       //Serial.print(tByte);
       //Serial.println(" bytes!");
+      //printf("Length: %d bytes\n", tByte);
     }else if(GradewRF::nBytes==2){
       GradewRF::rxChecksum=tByte;
     }else{
@@ -70,7 +71,10 @@ void GradewRF::addBit(char v)
       GradewRF::stopReceiving=0;
       if(GradewRF::verifyChecksum()){
         GradewRF::userDataAvailable=1;
-      }
+		//printf("Checksum: OK\n");
+      }else{
+		//printf("Checksum: ERROR\n");
+	}
     }
   }
 }
@@ -85,7 +89,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   GradewRF::lastTime=GradewRF::currentTime;
   //Serial.println(diffTime);
   if(GradewRF::syncState==0){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC1, 200)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC1, 250)){
       //Serial.println("SYNC1");
       GradewRF::syncState=1;
       return;
@@ -93,7 +97,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   }
 
   if(GradewRF::syncState==1){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC2, 200)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC2, 250)){
       //Serial.println("SYNC2");
       GradewRF::syncState=2;
       GradewRF::previousDiff=0;
@@ -105,7 +109,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   }
 
   if(GradewRF::syncState==2){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC3, 200)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC3, 250)){
       //Serial.println("SYNC3");
       GradewRF::syncState=3;
       GradewRF::previousDiff=0;
@@ -117,7 +121,7 @@ void ISR_ATTR GradewRF::handleInterrupt()
   }
 
   if(GradewRF::syncState==3){
-    if(checkOrder(GradewRF::diffTime, PULSE_SYNC4, 200)){
+    if(checkOrder(GradewRF::diffTime, PULSE_SYNC4, 250)){
       //Serial.println("Synchronized! Starting receiving");
       GradewRF::syncState=4;
       GradewRF::previousDiff=0;

@@ -14,12 +14,14 @@
 	typedef unsigned char byte;
 #endif
 
-#define PULSE_IGNORE 154
+#define PULSE_IGNORE 232
+
 #define PULSE_SYNC1 400
 #define PULSE_SYNC2 800
 #define PULSE_SYNC3 1200
 #define PULSE_SYNC4 400
-#define PULSE_SHORT 232
+
+#define PULSE_SHORT 400
 #define PULSE_LONG 1160
 #define BYTE_SYNC 75
 #define MAX_SIGNAL_DATA 128
